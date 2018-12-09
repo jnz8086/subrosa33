@@ -1,0 +1,1633 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="27">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>30</ID>
+      <Description>"-----Basic Settings-----"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>31</ID>
+          <Description>"Server name"</Description>
+          <VariableType>String</VariableType>
+          <Length>31</Length>
+          <Unicode>0</Unicode>
+          <CodePage>0</CodePage>
+          <ZeroTerminate>1</ZeroTerminate>
+          <Address>subrosadedicated.exe+8C0FD54</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"Game mode"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8FCEB28</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>33</ID>
+          <Description>"Max players"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8C10168</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>34</ID>
+      <Description>"-----Info only-----"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>35</ID>
+          <Description>"Rounds passed"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+1B1F9C08</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>4</ID>
+          <Description>"Connected players"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+1545F280</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>37</ID>
+      <Description>"-----misc-----"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>38</ID>
+          <Description>"Game timer"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8FCED44</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>39</ID>
+          <Description>"Game state"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8FCED40</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>5</ID>
+          <Description>"Game reset"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8C1018C</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>27</ID>
+      <Description>"-----scripts-----"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>26</ID>
+          <Description>"SRU mod (wip 12/9/18)"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>/*
+Dean and Kalsb abuse admin permissions to bully community members.
+*/
+
+//----------------
+
+define(mydata,subrosadedicated.exe+8086500)
+
+define(cfg_traffic_cars,mydata+0)
+define(cfg_allow_shooting,mydata+4)
+define(cfg_preparation,mydata+8)
+define(cfg_flimpo,mydata+C)
+
+define(arena,mydata+40)
+define(arena_sizeof,40+54)
+define(arena_name,arena+0)
+define(arena_spawn,arena+40)
+define(arena_radius,arena+38)
+define(arena_lives,arena+3C)
+define(arena_gun,arena+30)
+define(arena_mags,arena+34)
+define(arena_car,arena+2C)
+
+//-----
+
+
+define(game_mode,subrosadedicated.exe+8FCEB28)
+define(game_state,subrosadedicated.exe+8FCED40)
+define(game_reset,subrosadedicated.exe+8C1018C)
+define(game_timer,subrosadedicated.exe+8FCED44)
+
+
+//player
+define(p0,subrosadedicated.exe+11EA8E60)
+define(p_name,4)
+define(p_team,70)
+define(p_h,84)
+define(ps,3818)
+
+//character
+define(h0,subrosadedicated.exe+4C0804)
+define(h_pos,74)
+define(hs,354C)
+
+//corp
+define(corp0,subrosadedicated.exe+8FCEE1C)
+define(corps,15E4)
+
+
+define(arm_func,subrosadedicated.exe+4A5C0)
+               //(character, weapon, amount of mags)
+
+define(human_spawn_func,subrosadedicated.exe+72BD0)
+               //(float* position, float* rotation, int player_id)
+
+define(vehicle_spawn_func,subrosadedicated.exe+47270)
+               //(type, *float[3] position, *float[3]? velocity, *float[9] orientation, color)
+
+define(message_func,subrosadedicated.exe+6E20)
+               //(int type, char* message, int channel, int variation)
+
+[ENABLE]
+
+
+
+
+
+
+
+
+
+alloc(tmpbuffer,4096)
+
+alloc(strings,2048)
+strings:
+label(s_a)
+s_a:
+  db 'a' 'b' 0
+label(s_w)
+s_w:
+  db 'w' 'b' 0
+label(s_r)
+s_r:
+  db 'r' 'b' 0
+label(s_rp)
+s_rp:
+  db 'r' '+' 0
+label(s_delim)
+s_delim:
+  db ',' 0
+label(s_mv)
+s_mv:
+  db '/' 'm' 'v' 0
+label(s_fset)
+s_fset:
+  db '/' 'f' 's' 'e' 't' 0
+label(s_fpos)
+s_fpos:
+  db '/' 'f' 'p' 'o' 's' 0
+label(s_fgun)
+s_fgun:
+  db '/' 'f' 'g' 'u' 'n' 0
+label(s_fmags)
+s_fmags:
+  db '/' 'f' 'm' 'a' 'g' 's' 0
+label(s_fs)
+s_fs:
+  db '/' 'f' 's' ' ' 0
+label(s_fl)
+s_fl:
+  db '/' 'f' 'l' ' ' 0
+label(s_fr)
+s_fr:
+  db '/' 'f' 'r' ' ' 0
+label(s_flist)
+s_flist:
+  db '/' 'f' 'l' 'i' 's' 't' 0
+label(s_ready)
+s_ready:
+  db '/' 'r' 'e' 'a' 'd' 'y' 0
+label(s_flives)
+s_flives:
+  db '/' 'f' 'l' 'i' 'v' 'e' 's' 0
+label(s_fireoff)
+s_fireoff:
+  db '/' 'f' '0' 0
+label(s_fireon)
+s_fireon:
+  db '/' 'f' '1' 0
+label(s_rg)
+s_rg:
+  db '/' 'r' 'g' 0
+label(s_tc)
+s_tc:
+  db '/' 't' 'c' 0
+label(s_flimpo)
+s_flimpo:
+  db '/' 'f' 'l' 'i' 'm' 'p' 'o' 0
+
+label(s_traffic)
+s_traffic:
+  db 't' 'r' 'a' 'f' 'f' 'i' 'c' ' ' 'c' 'a' 'r' 's' ':' ' ' '%' 'i' 0
+
+label(s_pos)
+s_pos:
+  db '[' '%' 'f' ' ' ',' ' ' '%' 'f' ' ' ',' ' ' '%' 'f' ']' 0
+
+
+alloc(mycode,4096)
+mycode:
+//----------- initialize the data --------------
+
+mov [cfg_allow_shooting], 1
+
+
+cmp [arena_spawn+C+0],0
+jne init_ret
+
+mov [cfg_traffic_cars],#32
+mov [cfg_preparation],#300
+
+mov [arena_gun],#11
+mov [arena_mags],4
+
+mov [arena_radius],(float)1.5
+
+mov [arena_spawn+0+0],(float)1220.0
+mov [arena_spawn+0+4],(float)70.0
+mov [arena_spawn+0+8],(float)1780.0
+
+mov [arena_spawn+C+0],(float)1240.0
+mov [arena_spawn+C+4],(float)70.0
+mov [arena_spawn+C+8],(float)1780.0
+
+mov [arena_spawn+18+0],(float)1204.0
+mov [arena_spawn+18+4],(float)70.0
+mov [arena_spawn+18+8],(float)1780.0
+
+label(init_ret)
+init_ret:
+ret
+createThread(mycode)
+
+
+label(frand1)
+frand1:
+call msvcrt.rand
+push eax
+fild dword [esp]
+//push randmax
+push 7FFF
+fidiv dword [esp]
+add esp,8
+ret
+
+
+
+//----------- custom admin commands -------------
+
+alloc(newmem2,2048)
+label(returnhere2)
+label(originalcode2)
+label(exit2)
+
+newmem2:
+          pushad
+{
+subrosadedicated.exe+5F98C - 8B 5C 24 18           - mov ebx,[esp+18]
+subrosadedicated.exe+5F990 - 8B 2D 98601501        - mov ebp,[subrosadedicated.exe+86098]
+subrosadedicated.exe+5F996 - 6A 09                 - push 09
+subrosadedicated.exe+5F998 - 68 84711501           - push subrosadedicated.exe+87184 ["/message "]
+subrosadedicated.exe+5F99D - 53                    - push ebx
+subrosadedicated.exe+5F99E - FF D5                 - call ebp
+subrosadedicated.exe+5F9A0 - 83 C4 0C              - add esp,0C
+subrosadedicated.exe+5F9A3 - 85 C0                 - test eax,eax
+subrosadedicated.exe+5F9A5 - 75 20                 - jne subrosadedicated.exe+5F9C7
+}
+
+define(custom_msg,esp+20+18)
+define(custom_player,esp+20+14)
+
+//------------ /rg
+
+mov ebx,[custom_msg]
+push 3
+push s_rg
+push ebx
+call msvcrt.strncmp
+add esp,C
+test eax,eax
+jne custom_tc
+
+
+mov [game_reset],1
+
+jmp custom_ret
+//------------ /tc
+label(custom_tc)
+custom_tc:
+
+mov ebx,[custom_msg]
+push 3
+push s_tc
+push ebx
+call msvcrt.strncmp
+add esp,C
+test eax,eax
+jne custom_fset
+
+mov ebx,[custom_msg]
+cmp byte ptr [ebx+3],0
+jne custom_tc_set
+
+  push [cfg_traffic_cars]
+  push s_traffic
+  push tmpbuffer
+  call msvcrt.sprintf
+  add esp,C
+
+  push 0
+  push -1
+  push tmpbuffer
+  push 0
+  call message_func
+  add esp,10
+
+jmp custom_ret
+label(custom_tc_set)
+custom_tc_set:
+
+add ebx,4
+push ebx
+call msvcrt.atoi
+add esp,4
+
+mov [cfg_traffic_cars],eax
+
+jmp custom_ret
+//----------- /fset
+label(custom_fset)
+custom_fset:
+
+
+//---------- /ready
+label(custom_ready)
+custom_ready:
+
+mov ebx,[custom_msg]
+push 5
+push s_ready
+push ebx
+call msvcrt.strncmp
+add esp,C
+test eax,eax
+jne custom_fpos
+
+//todo
+mov eax,[cfg_preparation]
+mov [game_timer],eax
+
+    cmp [cfg_flimpo],0
+    jne custom_ret
+    mov [game_timer],#3600
+
+
+
+jmp custom_ret
+//---------- /fpos
+label(custom_fpos)
+custom_fpos:
+
+mov ebx,[custom_msg]
+push 4
+push s_fpos
+push ebx
+call msvcrt.strncmp
+add esp,C
+test eax,eax
+jne custom_flimpo
+
+
+mov ecx,[custom_player]
+imul ecx,ps
+mov ebx,[p0+p_h+ecx]
+imul ebx,hs
+
+/*
+push [h0+h_pos+ebx+8]
+push [h0+h_pos+ebx+4]
+push [h0+h_pos+ebx+0]
+*/
+sub esp,18
+  fld  dword ptr [h0+h_pos+ebx+0]
+  fstp qword ptr [esp+0]
+  fld  dword ptr [h0+h_pos+ebx+4]
+  fstp qword ptr [esp+8]
+  fld  dword ptr [h0+h_pos+ebx+8]
+  fstp qword ptr [esp+10]
+push s_pos
+push tmpbuffer
+call msvcrt.sprintf
+add esp,20
+
+  push 0
+  push -1
+  push tmpbuffer
+  push 0
+  call message_func
+  add esp,10
+
+
+
+
+
+jmp custom_ret
+//---------- /flimpo
+label(custom_flimpo)
+custom_flimpo:
+
+mov ebx,[custom_msg]
+push 6
+push s_flimpo
+push ebx
+call msvcrt.strncmp
+add esp,C
+test eax,eax
+jne custom_ret
+
+mov eax,1
+xor [cfg_flimpo],eax
+mov [game_reset],1
+
+
+
+
+
+
+
+label(custom_ret)
+custom_ret:
+        popad
+originalcode2:
+mov ebx,[esp+18]
+mov ebp,[subrosadedicated.exe+86098]
+
+exit2:
+jmp returnhere2
+
+"subrosadedicated.exe"+5F98C:
+jmp newmem2
+nop
+nop
+nop
+nop
+nop
+returnhere2:
+
+
+
+
+
+//---------- traffic spawn (round mode) --------
+
+alloc(newmem,512)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+
+mov eax,[cfg_traffic_cars]
+push eax
+
+originalcode:
+//push 00000080
+
+exit:
+jmp returnhere
+
+"subrosadedicated.exe"+8301A:
+jmp newmem
+returnhere:
+
+
+//------------- initial player spawn (round mode) ------------
+
+alloc(newmem6,2048)
+label(returnhere6)
+label(originalcode6)
+label(exit6)
+
+newmem6:
+
+cmp [cfg_flimpo],0
+je originalcode6
+
+         pushad
+
+mov esi,[esp+20]
+mov ebp,[esp+28]
+imul ebx,ebp,ps
+
+mov ecx,[p0+p_team+ebx]
+imul ecx,C
+
+{
+mov eax,[arena_spawn+ecx+0]
+mov [esi+0],eax
+  mov eax,[arena_spawn+ecx+4]
+  mov [esi+4],eax
+mov eax,[arena_spawn+ecx+8]
+mov [esi+8],eax
+}
+        push (float)0.5
+           push ecx
+           push esi
+              call frand1
+              fsub [esp+8]
+           mov ecx,[esp+4]
+           mov esi,[esp]
+                fmul [arena_radius]
+                fadd [arena_spawn+ecx+0]
+                fstp [esi+0]
+           {  call frand1
+           mov ecx,[esp+4]
+           mov esi,[esp]
+                fmul [arena_radius]
+                fadd [arena_spawn+ecx+4]
+                fstp [esi+4]}
+                      mov eax,[arena_spawn+ecx+4]
+                      mov [esi+4],eax
+             call frand1
+             fsub [esp+8]
+           pop esi
+           pop ecx
+           pop eax
+                fmul [arena_radius]
+                fadd [arena_spawn+ecx+8]
+                fstp [esi+8]
+
+
+
+         popad
+
+call subrosadedicated.exe+72BD0
+
+cmp [arena_gun],0
+je round_spawn_ret
+
+         pushad
+
+push [arena_mags]
+push [arena_gun]
+push eax
+call arm_func
+add esp,C
+
+         popad
+label(round_spawn_ret)
+round_spawn_ret:
+
+jmp exit6
+originalcode6:
+call subrosadedicated.exe+72BD0
+               //(float* position, float* rotation, int player_id)
+
+exit6:
+jmp returnhere6
+
+"subrosadedicated.exe"+82EB1:
+jmp newmem6
+returnhere6:
+
+
+
+//-------------- round mode preparation -----
+
+
+
+
+alloc(newmem15,2048)
+label(returnhere15)
+label(originalcode15)
+label(exit15)
+
+newmem15:
+
+cmp [cfg_flimpo],0
+je originalcode15
+
+cmp [game_timer],#3600
+jg exit15
+
+
+originalcode15:
+mov [game_timer],ebx
+
+exit15:
+jmp returnhere15
+
+"subrosadedicated.exe"+82FD0:
+jmp newmem15
+nop
+returnhere15:
+
+
+
+
+
+//subrosadedicated.exe+83002:
+//mov [subrosadedicated.exe+8FCED44],#300
+
+alloc(newmem21,256)
+label(returnhere21)
+label(originalcode21)
+label(exit21)
+
+newmem21:
+
+cmp [cfg_flimpo],0
+je originalcode21
+
+mov eax,[cfg_preparation]
+mov [subrosadedicated.exe+8FCED44],eax
+jmp exit21
+
+originalcode21:
+mov [subrosadedicated.exe+8FCED44],#3600
+
+exit21:
+jmp returnhere21
+
+"subrosadedicated.exe"+83002:
+jmp newmem21
+nop
+nop
+nop
+nop
+nop
+returnhere21:
+
+
+
+
+//-------------- round mode tick ------------
+
+
+alloc(newmem10,2048)
+label(returnhere10)
+label(originalcode10)
+label(exit10)
+
+newmem10:
+
+cmp [cfg_flimpo],0
+jne exit10
+
+originalcode10:
+mov [subrosadedicated.exe+8FCED44],ebx
+
+exit10:
+jmp returnhere10
+
+"subrosadedicated.exe"+834B5:
+jmp newmem10
+nop
+returnhere10:
+
+
+
+//-------------- team active ----------------
+
+{
+subrosadedicated.exe+84543:
+db 90  90  90 90 90 90
+
+//subrosadedicated.exe+838F4:
+//db 90  90  90 90 90 90  90 90 90 90
+
+subrosadedicated.exe+8383E:
+db 90  90  90 90 90 90
+}
+
+
+alloc(newmem28,256)
+label(returnhere28)
+label(originalcode28)
+label(exit28)
+
+newmem28:
+
+cmp [cfg_flimpo],0
+jne exit28
+
+originalcode28:
+inc [ecx+subrosadedicated.exe+8FCEE1C]
+
+exit28:
+jmp returnhere28
+
+"subrosadedicated.exe"+84543:
+jmp newmem28
+nop
+returnhere28:
+
+
+
+
+
+alloc(newmem36,256)
+label(returnhere36)
+label(originalcode36)
+label(exit36)
+
+newmem36:
+
+cmp [cfg_flimpo],0
+jne exit36
+
+originalcode36:
+mov [subrosadedicated.exe+8FCED44],esi
+
+exit36:
+jmp returnhere36
+
+"subrosadedicated.exe"+8383E:
+jmp newmem36
+nop
+returnhere36:
+
+
+
+
+
+
+
+//---- base menu -----------
+
+{
+subrosadedicated.exe+A038:
+db 90  90  90 90 90 90  90 90 90 90
+}
+
+alloc(newmem45,2048)
+label(returnhere45)
+label(originalcode45)
+label(exit45)
+
+newmem45:
+
+cmp [cfg_flimpo],0
+jne exit45
+
+originalcode45:
+mov [ebp+subrosadedicated.exe+11EA8FAC],00000010
+
+exit45:
+jmp returnhere45
+
+"subrosadedicated.exe"+A038:
+jmp newmem45
+nop
+nop
+nop
+nop
+nop
+returnhere45:
+
+
+//------------------ void crash fix ------------
+
+alloc(newmem55,2048)
+label(returnhere55)
+label(originalcode55)
+label(exit55)
+
+newmem55:
+jng subrosadedicated.exe+4364C
+
+
+        pushad
+
+    sub esp,8
+    fld [esi+subrosadedicated.exe+8FFDC60+48]
+    fstp qword [esp]
+
+    call msvcrt.isnan
+
+    add esp,8
+    cmp eax,0
+
+        popad
+jne subrosadedicated.exe+4364C
+
+originalcode55:
+//jng subrosadedicated.exe+4364C
+
+exit55:
+jmp returnhere55
+
+"subrosadedicated.exe"+4337C:
+jmp newmem55
+nop
+returnhere55:
+
+
+
+[DISABLE]
+dealloc(newmem55)
+"subrosadedicated.exe"+4337C:
+jng subrosadedicated.exe+4364C
+//Alt: db 0F 8E CA 02 00 00
+
+dealloc(newmem45)
+"subrosadedicated.exe"+A038:
+mov [ebp+subrosadedicated.exe+11EA8FAC],00000010
+//Alt: db C7 85 AC 8F B6 12 10 00 00 00
+dealloc(newmem36)
+"subrosadedicated.exe"+8383E:
+mov [subrosadedicated.exe+8FCED44],esi
+//Alt: db 89 35 44 ED C8 09
+dealloc(newmem28)
+"subrosadedicated.exe"+84543:
+inc [ecx+subrosadedicated.exe+8FCEE1C]
+//Alt: db FF 81 1C EE C8 09
+dealloc(newmem21)
+"subrosadedicated.exe"+83002:
+mov [subrosadedicated.exe+8FCED44],#3600
+//Alt: db C7 05 44 ED 09 0A 2C 01 00 00
+dealloc(newmem15)
+"subrosadedicated.exe"+82FD0:
+mov [subrosadedicated.exe+8FCED44],ebx
+//Alt: db 89 1D 44 ED 09 0A
+dealloc(newmem10)
+"subrosadedicated.exe"+834B5:
+mov [subrosadedicated.exe+8FCED44],ebx
+//Alt: db 89 1D 44 ED 09 0A
+dealloc(newmem6)
+"subrosadedicated.exe"+82EB1:
+call subrosadedicated.exe+72BD0
+//Alt: db E8 1A FD FE FF
+dealloc(newmem2)
+"subrosadedicated.exe"+5F98C:
+mov ebx,[esp+18]
+mov ebp,[subrosadedicated.exe+86098]
+//Alt: db 8B 5C 24 18 8B 2D 98 60 15 01
+dealloc(newmem)
+"subrosadedicated.exe"+8301A:
+push 00000080
+//Alt: db 68 80 00 00 00
+
+
+{
+subrosadedicated.exe+84543:
+inc [ecx+subrosadedicated.exe+8FCEE1C]
+
+subrosadedicated.exe+838F4:
+mov [subrosadedicated.exe+8FCED40],00000003
+
+subrosadedicated.exe+8383E:
+mov [subrosadedicated.exe+8FCED44],esi
+}
+
+//subrosadedicated.exe+83002:
+//mov [subrosadedicated.exe+8FCED44],00000E10 // 3600
+
+//subrosadedicated.exe+A038:
+//mov [ebp+subrosadedicated.exe+11EA8FAC],00000010 // 16
+
+
+dealloc(mycode)
+dealloc(strings)
+dealloc(tmpbuffer)
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>11</ID>
+              <Description>"^ flimpo settings       (will be replaced w/ admin commands later)"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>21</ID>
+                  <Description>"gun"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+30</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>22</ID>
+                  <Description>"mags"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+34</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>23</ID>
+                  <Description>"spawn radius"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+38</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>12</ID>
+                  <Description>"gold x"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*0+0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>13</ID>
+                  <Description>"gold y"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*0+4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>14</ID>
+                  <Description>"gold z"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*0+8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>15</ID>
+                  <Description>"mons x"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*1+0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>16</ID>
+                  <Description>"mons y"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*1+4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>17</ID>
+                  <Description>"mons z"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*1+8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>18</ID>
+                  <Description>"oxs x"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*2+0</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>19</ID>
+                  <Description>"oxs y"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*2+4</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>20</ID>
+                  <Description>"oxs z"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>subrosadedicated.exe+8086500+40+40+C*2+8</Address>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>25</ID>
+                  <Description>"preparation time"</Description>
+                  <VariableType>4 Bytes</VariableType>
+                  <Address>subrosadedicated.exe+8086508</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>29</ID>
+          <Description>"anti-ghosting"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>//player
+define(p0,subrosadedicated.exe+11EA8E60)
+define(p_name,4)
+define(p_team,70)
+define(p_h,84)
+define(p_skin,3794)
+define(ps,3818)
+
+define(players_max,#96)
+
+//character
+define(h0,subrosadedicated.exe+4C0804)
+define(h_pos,74)
+define(h_bp0_p,1A8)
+define(h_bp0_v,1C0)
+define(h_skin,34E4)
+define(h_health0,34)
+define(h_health1,3300)
+define(h_hand1,3098)
+define(hs,354C)
+
+
+define(human_spawn_func,subrosadedicated.exe+72BD0)
+               //(float* position, float* rotation, int player_id)
+
+define(vehicle_spawn_func,subrosadedicated.exe+47270)
+               //(type, *float[3] position, *float[3]? velocity, *float[9] orientation, color)
+
+define(item_spawn_func,subrosadedicated.exe+20880)
+               //(int item_type, float *pos, [float* velocity], float *orientation)
+
+
+[ENABLE]
+
+
+
+
+
+
+
+
+
+
+
+
+
+alloc(mydata,2048)
+define(heaven_points,mydata+0)
+
+//---------- initialize the data -----------------
+alloc(mycode,2048)
+mycode:
+
+mov [heaven_points+0+0],(float)1231.0
+mov [heaven_points+0+4],(float)30.0
+mov [heaven_points+0+8],(float)3500.0
+
+mov [heaven_points+C+0],(float)250.0
+mov [heaven_points+C+4],(float)30.0
+mov [heaven_points+C+8],(float)250.0
+
+mov [heaven_points+18+0],(float)3700.0
+mov [heaven_points+18+4],(float)30.0
+mov [heaven_points+18+8],(float)150.0
+
+ret
+createThread(mycode)
+
+
+label(frand1)
+frand1:
+call msvcrt.rand
+push eax
+fild dword [esp]
+//push randmax
+push 7FFF
+fidiv dword [esp]
+add esp,8
+ret
+
+
+//-------- round mode state 2 tick -------------
+
+alloc(newmem2,2048)
+label(returnhere2)
+label(originalcode2)
+label(exit2)
+
+newmem2:
+     pushad
+
+
+mov ecx,players_max
+xor ebx,ebx
+xor edi,edi
+label(update_players_loop)
+update_players_loop:
+
+cmp [p0+ebx],0
+je update_next
+
+cmp [p0+p_team+ebx],2
+jg update_next
+
+cmp [p0+p_h+ebx],-1
+je update_respawn
+
+mov eax,[p0+p_h+ebx]
+imul eax,hs
+
+cmp [h0+h_skin+eax],6
+jne update_next
+
+//----- bounds
+
+imul edx,edi,ps
+mov edx,[p0+p_team+edx]
+imul edx,C
+
+push (float)100.0
+
+      fld [heaven_points+edx+0]
+      fsub [h0+h_bp0_p+eax+0]
+    fld st(0)
+    fabs
+        fld [esp]
+        fcomip st(1)
+        fstp st(0)
+        ja bounds_skip_x
+     fdiv [esp]
+     fdiv [esp]
+     fst [h0+h_bp0_v+eax+0]
+  label(bounds_skip_x)
+  bounds_skip_x:
+  fstp st(0)
+
+      fld [heaven_points+edx+8]
+      fsub [h0+h_bp0_p+eax+8]
+    fld st(0)
+    fabs
+        fld [esp]
+        fcomip st(1)
+        fstp st(0)
+        ja bounds_skip_z
+     fdiv [esp]
+     fdiv [esp]
+     fst [h0+h_bp0_v+eax+8]
+  label(bounds_skip_z)
+  bounds_skip_z:
+  fstp st(0)
+
+add esp,4
+jmp update_next
+
+//---- respawn
+
+label(update_respawn)
+update_respawn:
+
+push ebx
+push ecx
+push edi
+
+                    pushad
+                 push [p0+p_skin+edi]
+                 push edi
+                    imul edi,ps
+                    mov [p0+p_skin+edi],6
+                    call subrosadedicated.exe+7060
+                 pop edi
+                 pop eax
+                  imul edi,ps
+                  mov [p0+p_skin+edi],eax
+                    popad
+
+
+
+push (float)0.0
+push (float)0.0
+push (float)1.0
+  push (float)0.0
+  push (float)1.0
+  push (float)0.0
+push (float)-1.0
+push (float)0.0
+push (float)0.0
+mov esi,esp  //orientation
+
+sub esp,C
+mov ebp,esp  //position
+
+   imul eax,edi,ps
+   mov edx,[p0+p_team+eax]
+
+ imul edx,C
+  mov eax,[heaven_points+0+edx]
+  mov [ebp+0],eax
+    mov eax,[heaven_points+4+edx]
+    mov [ebp+4],eax
+  mov eax,[heaven_points+8+edx]
+  mov [ebp+8],eax
+
+      pushad
+               call frand1
+               mov edx,[esp+8]
+               fadd [edx+0]
+               fstp [edx+0]
+
+               call frand1
+               mov edx,[esp+8]
+               fadd [edx+8]
+               fstp [edx+8]
+      popad
+
+
+push edi        //player id
+push esi        //orientation
+push ebp        //position
+call human_spawn_func
+add esp,8
+pop edi //player id
+add esp,30
+
+imul edx,edi,ps
+mov [p0+p_h+edx],eax
+
+imul eax,hs
+mov [h0+h_skin+eax],6
+
+
+pop edi
+pop ecx
+pop ebx
+
+
+
+
+
+label(update_next)
+update_next:
+add ebx,ps
+inc edi
+    dec ecx
+    cmp ecx,0
+    jge update_players_loop
+
+
+
+
+
+label(update_ret)
+update_ret:
+     popad
+originalcode2:
+imul eax,eax,00000E10
+
+exit2:
+jmp returnhere2
+
+"subrosadedicated.exe"+834A9:
+jmp newmem2
+nop
+returnhere2:
+
+
+
+//--------------- fall damage --------------------
+
+
+alloc(newmem4,2048)
+label(returnhere4)
+label(originalcode4)
+label(exit4)
+
+newmem4:
+
+cmp [h0+h_skin+esi],6
+je exit4
+
+originalcode4:
+add dword ptr [esi+subrosadedicated.exe+4C0838],-78
+
+exit4:
+jmp returnhere4
+
+"subrosadedicated.exe"+7E211:
+jmp newmem4
+nop
+nop
+returnhere4:
+
+//---------------  fall damage (left leg) ------
+
+alloc(newmem22,2048)
+label(returnhere22)
+label(originalcode22)
+label(exit22)
+
+newmem22:
+
+cmp [h0+h_skin+esi],6
+je exit22
+
+originalcode22:
+mov [esi+subrosadedicated.exe+4C3B30],edx
+
+exit22:
+jmp returnhere22
+
+"subrosadedicated.exe"+7E290:
+jmp newmem22
+nop
+returnhere22:
+
+//---------------- fall damage (right leg) -----
+
+alloc(newmem29,2048)
+label(returnhere29)
+label(originalcode29)
+label(exit29)
+
+newmem29:
+
+cmp [h0+h_skin+esi],6
+je exit29
+
+originalcode29:
+mov [esi+subrosadedicated.exe+4C3B38],edx
+
+exit29:
+jmp returnhere29
+
+"subrosadedicated.exe"+7E29D:
+jmp newmem29
+nop
+returnhere29:
+
+
+//--------------- vehicle damage ---------------
+
+
+alloc(newmem16,2048)
+label(returnhere16)
+label(originalcode16)
+label(exit16)
+
+newmem16:
+
+cmp [h0+h_skin+esi],6
+je exit16
+
+originalcode16:
+add dword ptr [esi+subrosadedicated.exe+4C0838],-78
+
+exit16:
+jmp returnhere16
+
+"subrosadedicated.exe"+7E91B:
+jmp newmem16
+nop
+nop
+returnhere16:
+
+
+
+
+//-------------------- jump height ----------
+
+alloc(newmem7,2048)
+label(returnhere7)
+label(originalcode7)
+label(exit7)
+
+newmem7:
+
+fld dword ptr [subrosadedicated.exe+86E3C]
+
+cmp [h0+h_skin+esi],6
+jne exit7
+
+fadd st(0),st(0)
+
+originalcode7:
+//fld dword ptr [subrosadedicated.exe+86E3C]
+
+
+
+exit7:
+jmp returnhere7
+
+"subrosadedicated.exe"+643F1:
+jmp newmem7
+nop
+returnhere7:
+
+
+//------------------ picking up items ---------
+
+
+alloc(newmem11,2048)
+label(returnhere11)
+label(originalcode11)
+label(exit11)
+
+newmem11:
+
+imul eax,ebp,hs
+cmp [h0+h_skin+eax],6
+je exit11
+
+originalcode11:
+call subrosadedicated.exe+8BB0
+
+exit11:
+jmp returnhere11
+
+"subrosadedicated.exe"+437E4:
+jmp newmem11
+returnhere11:
+
+//------------------ entering vehicles -----------------
+
+alloc(newmem37,2048)
+label(returnhere37)
+label(originalcode37)
+label(exit37)
+
+newmem37:
+
+cmp [h0+h_skin+esi],6
+je exit37
+
+originalcode37:
+mov [esi+subrosadedicated.exe+4C0824],edx
+
+exit37:
+jmp returnhere37
+
+"subrosadedicated.exe"+7EE92:
+jmp newmem37
+nop
+returnhere37:
+
+
+//---------------- round start (round mode) ----------------
+
+
+alloc(newmem46,2048)
+label(returnhere46)
+label(originalcode46)
+label(exit46)
+
+newmem46:
+               pushad
+
+mov ecx,2
+label(start_playground)
+start_playground:
+push ecx
+
+push (float)0.0
+push (float)1.0
+push (float)0.0
+  push (float)0.0
+  push (float)0.0
+  push (float)1.0
+push (float)1.0
+push (float)0.0
+push (float)0.0
+mov esi,esp
+
+imul eax,ecx,C
+push [heaven_points+eax+8]
+push [heaven_points+eax+4]
+push [heaven_points+eax+0]
+mov edi,esp
+
+push esi
+push 0
+push edi
+push 22
+call item_spawn_func
+               //(int item_type, float *pos, [float* velocity], float *orientation)
+add esp,10+30
+
+pop ecx
+dec ecx
+  cmp ecx,0
+  jge start_playground
+
+
+               popad
+originalcode46:
+mov [subrosadedicated.exe+8FCED44],ecx
+
+exit46:
+jmp returnhere46
+
+"subrosadedicated.exe"+8347B:
+jmp newmem46
+nop
+returnhere46:
+
+
+ 
+ 
+[DISABLE]
+dealloc(newmem46)
+"subrosadedicated.exe"+8347B:
+mov [subrosadedicated.exe+8FCED44],ecx
+//Alt: db 89 0D 44 ED C8 09
+dealloc(newmem37)
+"subrosadedicated.exe"+7EE92:
+mov [esi+subrosadedicated.exe+4C0824],edx
+//Alt: db 89 96 24 08 18 01
+dealloc(newmem29)
+"subrosadedicated.exe"+7E29D:
+mov [esi+subrosadedicated.exe+4C3B38],edx
+//Alt: db 89 96 38 3B 18 01
+dealloc(newmem22)
+"subrosadedicated.exe"+7E290:
+mov [esi+subrosadedicated.exe+4C3B30],edx
+//Alt: db 89 96 30 3B 18 01
+dealloc(newmem16)
+"subrosadedicated.exe"+7E91B:
+add dword ptr [esi+subrosadedicated.exe+4C0838],-78
+//Alt: db 83 86 38 08 18 01 88
+dealloc(newmem11)
+"subrosadedicated.exe"+437E4:
+call subrosadedicated.exe+8BB0
+//Alt: db E8 C7 53 FC FF
+dealloc(newmem7)
+"subrosadedicated.exe"+643F1:
+fld dword ptr [subrosadedicated.exe+86E3C]
+//Alt: db D9 05 3C 6E D4 00
+dealloc(newmem4)
+"subrosadedicated.exe"+7E211:
+add dword ptr [esi+subrosadedicated.exe+4C0838],-78
+//Alt: db 83 86 38 08 18 01 88
+dealloc(newmem2)
+"subrosadedicated.exe"+834A9:
+imul eax,eax,00000E10
+//Alt: db 69 C0 10 0E 00 00
+
+
+dealloc(mydata)
+dealloc(mycode)
+
+
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>24</ID>
+          <Description>"Disable goldmen"</Description>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+
+
+
+alloc(newmem,256)
+label(returnhere)
+label(originalcode)
+label(exit)
+
+newmem:
+
+cmp esi,0
+je exit
+
+originalcode:
+mov [ebx+subrosadedicated.exe+11EA8ED0],esi
+
+exit:
+jmp returnhere
+
+"subrosadedicated.exe"+75892:
+jmp newmem
+nop
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+dealloc(newmem)
+"subrosadedicated.exe"+75892:
+mov [ebx+subrosadedicated.exe+11EA8ED0],esi
+//Alt: db 89 B3 D0 8E F7 12
+
+</AssemblerScript>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>3</ID>
+      <Description>"-----structs-----"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>7</ID>
+          <Description>"player"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+11EA8E60+3818*0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>8</ID>
+          <Description>"human"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+4C0804+354C*0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2</ID>
+          <Description>"vehicle"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+80866E0+5C48*0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>28</ID>
+          <Description>"item"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8FFDC60+1F4*0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>9</ID>
+          <Description>"corp"</Description>
+          <VariableType>4 Bytes</VariableType>
+          <Address>subrosadedicated.exe+8FCEE1C+15E4*0</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>
