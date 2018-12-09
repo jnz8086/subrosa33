@@ -8,11 +8,11 @@ Work in progress.
 SRU mod includes following custom admin commands:
 
 ``` 
-/flimpo - toggle between round mode and old style flimpo mode (round by default)
+/flimpo   - toggle between round mode and old style flimpo mode (round by default)
 /rg       - short for /resetgame
 /ready    - force ready up everyone
-/tc num - set the amount of traffic cars (no argument to show the current value)
-/fpos - display your current coordinates
+/tc num   - set the amount of traffic cars (no argument to show the current value)
+/fpos     - display your current coordinates
 ```
 
 # Client notes
@@ -93,5 +93,7 @@ Vehicles
 # Contributors
 
 Tony Montana
+
 Gray
+
 InvaderMoo
