@@ -33,6 +33,8 @@ teams are typed in as numbers (0,1,2. 7 for observers)
 /setcash player,cash      - set player's cash (also sets stocks to 0)
 ```
 
+GeoIP requires "luaclient-i386.dll" and "geoip" in the game folder. (see my PUBG-mod repository)
+
 # Client notes
 
 # IDs
