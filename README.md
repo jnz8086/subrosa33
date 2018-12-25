@@ -8,11 +8,29 @@ Work in progress.
 SRU mod includes following custom admin commands:
 
 ``` 
-/flimpo   - toggle between round mode and old style flimpo mode (round by default)
-/rg       - short for /resetgame
-/ready    - force ready up everyone
-/tc num   - set the amount of traffic cars (no argument to show the current value)
-/fpos     - display your current coordinates
+players are typed in as a case-sensitive substring, like "Tony" for "Tony Montana"
+teams are typed in as numbers (0,1,2. 7 for observers)
+
+/flimpo                   - toggle between round mode and tdm
+/ready                    - force ready up in tdm mode
+/rg                       - short for /resetgame
+/tc num                   - set the amount of traffic cars (no argument to show current value)
+/fpos                     - display your current coordinates
+
+/mv player, team          - move player to another team
+/op player                - make player an admin
+/rn player,new_name       - rename player
+/pre player,tag           - prepend to player's name
+/kill player              - kill player in the game
+/spawnhelp player         - spawn right next to the player
+/mute player              - make player unable to type in observer chat
+
+/skip                     - set timer to 00:01
+/locktime                 - lock the time at the current state
+
+/resetcash                - reset everyone's cash, stocks, inventory and company stock prices
+/shift                    - rotate the teams
+/setcash player,cash      - set player's cash (also sets stocks to 0)
 ```
 
 # Client notes
