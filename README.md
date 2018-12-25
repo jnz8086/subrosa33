@@ -5,6 +5,8 @@ Work in progress.
 
 # Server notes
 
+Only meant to be working with subrosadedicated.exe from Alpha 33a, not Alpha 33c.
+
 SRU mod includes following custom admin commands:
 
 ``` 
